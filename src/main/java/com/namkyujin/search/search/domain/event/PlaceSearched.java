@@ -12,4 +12,9 @@ public class PlaceSearched extends ApplicationEvent {
     public static PlaceSearched of(SearchHistory source) {
         return new PlaceSearched(source);
     }
+
+    @Override
+    public SearchHistory getSource() {
+        return (SearchHistory) this.source;
+    }
 }

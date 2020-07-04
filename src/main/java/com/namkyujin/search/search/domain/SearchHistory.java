@@ -1,19 +1,18 @@
 package com.namkyujin.search.search.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.namkyujin.search.common.ArgumentValidator;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(indexes = {
-        @Index(name = "idx_created_at", columnList = "createdAt")
+        @Index(name = "idx_created_at_keyword", columnList = "createdAt, keyword")
 })
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class SearchHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,10 +31,12 @@ public class SearchHistory {
     }
 
     /* self encapsulation */  void setMemberId(long memberId) {
+        ArgumentValidator.minNumber(1, (int) memberId, "memberId");
         this.memberId = memberId;
     }
 
     /* self encapsulation */  void setKeyword(String keyword) {
+        ArgumentValidator.notEmpty(keyword, "keyword");
         this.keyword = keyword;
     }
 
