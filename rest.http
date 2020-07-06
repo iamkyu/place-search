@@ -1,0 +1,30 @@
+### 카카오 API 직접 검색
+GET https://dapi.kakao.com/v2/local/search/keyword.json?page=1&size=10&query=카카오프렌즈
+Authorization: KakaoAK {INPUT-YOUR-KEY}
+
+### (1) 로그인
+### 계정1. ryan / foobar
+### 계정2. apeach / foobar1
+### 계정3. frodo / foobar2
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "id": "ryan",
+  "password": "foobar"
+}
+
+> {%
+    client.global.set("token", response.body.data.token); // 응답 토큰 변수로 저장
+%}
+
+
+### (2) 검색
+GET http://localhost:8080/v1/search?page=1&size=10&keyword=카카오프렌즈
+Authorization: Bearer {{token}}
+
+### (3) 인기 검색어
+GET http://localhost:8080/v1/trends
+Authorization: Bearer {{token}}
+
+###
