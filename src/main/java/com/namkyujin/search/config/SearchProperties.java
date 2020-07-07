@@ -24,8 +24,6 @@ public class SearchProperties {
         FAST_FAIL("실패하더라도 빠르게 응답"),
         HA("정상적인 응답을 주기 위해 가능한 방법 모두 시도");
 
-        private static final Mode DEFAULT_MODE = FAST_FAIL;
-
         private String description;
 
         Mode(String description) {
