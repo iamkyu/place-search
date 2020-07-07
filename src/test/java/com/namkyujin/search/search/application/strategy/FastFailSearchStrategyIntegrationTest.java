@@ -35,7 +35,7 @@ class FastFailSearchStrategyIntegrationTest extends IntegrationTest {
     @TestConfiguration
     static class TestConfig {
         @Bean
-        public PlaceSearcher testPlaceSearcher() {
+        public PlaceSearcher testPlaceSearcher3() {
             return new PlaceSearcher() {
                 @Override
                 public SearchResult search(SearchQuery searchQuery) {
@@ -45,6 +45,21 @@ class FastFailSearchStrategyIntegrationTest extends IntegrationTest {
                 @Override
                 public int getOrder() {
                     return Order.TERTIARY.getOrderNumber();
+                }
+            };
+        }
+
+        @Bean
+        public PlaceSearcher testPlaceSearcher99() {
+            return new PlaceSearcher() {
+                @Override
+                public SearchResult search(SearchQuery searchQuery) {
+                    throw new UnsupportedOperationException("test bean");
+                }
+
+                @Override
+                public int getOrder() {
+                    return -99;
                 }
             };
         }
