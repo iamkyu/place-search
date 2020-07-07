@@ -30,12 +30,12 @@ public class SearchHistory {
         setKeyword(keyword);
     }
 
-    /* self encapsulation */  void setMemberId(long memberId) {
+    /* self encapsulation */ private void setMemberId(long memberId) {
         ArgumentValidator.minNumber(1, (int) memberId, "memberId");
         this.memberId = memberId;
     }
 
-    /* self encapsulation */  void setKeyword(String keyword) {
+    /* self encapsulation */ private void setKeyword(String keyword) {
         ArgumentValidator.notEmpty(keyword, "keyword");
         this.keyword = keyword;
     }
