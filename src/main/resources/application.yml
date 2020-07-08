@@ -20,7 +20,9 @@ security:
       validate-duration: 30M
 
 search:
-  mode: FAST_FAIL # HA | FAST_FAIL
+  mode: FAST_FAIL # FAST_FAIL | RETRY
+  max-retry: 3 # MODE 가 RETRY 일 때만 해당
+  vender: kakao
 
 circuit:
   wait-duration-in-open-state: 3s

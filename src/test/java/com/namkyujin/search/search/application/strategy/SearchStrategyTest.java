@@ -14,21 +14,19 @@ public abstract class SearchStrategyTest {
 
     protected SearchStrategy sut;
 
-    @DisplayName("첫번째 Searcher 가 성공하면 바로 응답을 반환한다")
+    @DisplayName("검색에 성공하면 바로 응답을 반환한다")
     @Test
     void shouldNotTryNextSearchWhenPrimarySearcherSuccess() {
         //given
-        AbstractTestSearcher first = new AbstractTestSearcher.NormalSearcher();
-        AbstractTestSearcher second = new AbstractTestSearcher.RuntimeExceptionSearcher();
-        sut = of(first, second);
+        AbstractTestSearcher searcher = new AbstractTestSearcher.NormalSearcher();
+        sut = createStrategy(searcher);
 
         //when
         sut.search(SEARCH_QUERY);
 
         //then
-        assertThat(first.getCallCount()).isEqualTo(1);
-        assertThat(second.getCallCount()).isEqualTo(0);
+        assertThat(searcher.getCallCount()).isEqualTo(1);
     }
 
-    abstract SearchStrategy of(PlaceSearcher... searchers);
+    abstract SearchStrategy createStrategy(PlaceSearcher searcher);
 }

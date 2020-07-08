@@ -1,6 +1,6 @@
 package com.namkyujin.search.search.model.exception;
 
-import java.util.Map;
+import java.util.List;
 
 public class SearchFailedException extends RuntimeException {
 
@@ -8,8 +8,11 @@ public class SearchFailedException extends RuntimeException {
         super(message);
     }
 
-    public static SearchFailedException createMultiSearchFailedException(Map<String, Throwable> classNameToThrowable) {
-        return new SearchFailedException(classNameToThrowable.toString());
+    public SearchFailedException(Throwable cause) {
+        super(cause);
     }
 
+    public static SearchFailedException createMultiSearchFailedException(List<Throwable> throwables) {
+        return new SearchFailedException(throwables.toString());
+    }
 }
