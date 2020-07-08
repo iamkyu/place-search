@@ -7,9 +7,7 @@ import com.namkyujin.search.search.application.PlaceSearcher;
 import com.namkyujin.search.search.model.SearchQuery;
 import com.namkyujin.search.search.model.SearchResult;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
-@Component
 @RequiredArgsConstructor
 public class KakaoPlaceSearcher implements PlaceSearcher {
     private final KakaoApiSpec kakaoApiSpec;

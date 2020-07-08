@@ -2,14 +2,12 @@ package com.namkyujin.search.search.application.searcher;
 
 import com.namkyujin.search.infrastructure.client.kakao.KakaoKeywordSearchResponse;
 import com.namkyujin.search.search.model.SearchResult;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-@Component
-class KakaoPlaceApiResponseTransformer implements PlaceApiResponseTransformer<KakaoKeywordSearchResponse> {
+public class KakaoPlaceApiResponseTransformer implements PlaceApiResponseTransformer<KakaoKeywordSearchResponse> {
 
     @Override
     public SearchResult transform(KakaoKeywordSearchResponse response) {

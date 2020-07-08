@@ -11,18 +11,24 @@ import java.util.Optional;
 @ConfigurationProperties("search")
 public class SearchProperties {
     private static final Mode DEFAULT_MODE = Mode.FAST_FAIL;
+    private static final Integer DEFAULT_MAX_RETRY = 1;
 
     private String mode;
+    private Integer maxRetry;
 
     public Mode getMode() {
         return Optional.ofNullable(Mode.get(mode))
                 .orElse(DEFAULT_MODE);
     }
 
+    public Integer getMaxRetry() {
+        return Optional.ofNullable(maxRetry)
+                .orElse(DEFAULT_MAX_RETRY);
+    }
 
     public enum Mode {
         FAST_FAIL("실패하더라도 빠르게 응답"),
-        HA("정상적인 응답을 주기 위해 가능한 방법 모두 시도");
+        RETRY("정해진 횟수만큼 재시도");
 
         private String description;
 

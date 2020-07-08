@@ -1,12 +1,14 @@
 package com.namkyujin.search.support;
 
-import com.namkyujin.search.infrastructure.circuit.CircuitBreakingException;
 import com.namkyujin.search.search.application.PlaceSearcher;
 import com.namkyujin.search.search.model.SearchQuery;
 import com.namkyujin.search.search.model.SearchResult;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @Getter
 public abstract class AbstractTestSearcher implements PlaceSearcher {
@@ -35,17 +37,23 @@ public abstract class AbstractTestSearcher implements PlaceSearcher {
         }
     }
 
-    public static class CircuitExceptionSearcher extends AbstractTestSearcher {
-        @Override
-        protected SearchResult delegate(SearchQuery searchQuery) {
-            throw new CircuitBreakingException();
-        }
-    }
+    public static class ExceptionSearcher extends AbstractTestSearcher {
+        private final List<RuntimeException> exceptions;
+        private int lastIndex = 0;
 
-    public static class RuntimeExceptionSearcher extends AbstractTestSearcher {
+        public ExceptionSearcher(RuntimeException... exceptions) {
+            this.exceptions = new ArrayList<>(Arrays.asList(exceptions));
+        }
+
         @Override
         protected SearchResult delegate(SearchQuery searchQuery) {
-            throw new UnsupportedOperationException();
+            if (exceptions.size() > lastIndex) {
+                RuntimeException willThrow = exceptions.get(lastIndex);
+                lastIndex++;
+                throw willThrow;
+            }
+
+            return SearchResult.of(1, 1, Collections.emptyList());
         }
     }
 }

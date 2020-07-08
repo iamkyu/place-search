@@ -1,41 +1,26 @@
 package com.namkyujin.search.search.application.strategy;
 
 import com.namkyujin.search.config.SearchProperties;
-import com.namkyujin.search.infrastructure.circuit.CircuitBreakingException;
 import com.namkyujin.search.search.application.PlaceSearcher;
-import com.namkyujin.search.search.model.exception.SearchFailedException;
+import com.namkyujin.search.search.application.SearchStrategy;
 import com.namkyujin.search.search.model.SearchQuery;
 import com.namkyujin.search.search.model.SearchResult;
+import com.namkyujin.search.search.model.exception.SearchFailedException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ClassUtils;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Component
-public class FastFailSearchStrategy extends AbstractSearchStrategy {
-    public FastFailSearchStrategy(List<PlaceSearcher> placeSearchers) {
-        super(placeSearchers);
-    }
+@RequiredArgsConstructor
+public class FastFailSearchStrategy implements SearchStrategy {
+    private final PlaceSearcher placeSearcher;
 
     @Override
     public SearchResult search(SearchQuery searchQuery) {
-        Map<String, Throwable> searcherToThrowable = new HashMap<>();
-        for (PlaceSearcher searcher : placeSearchers) {
-            try {
-                return searcher.search(searchQuery);
-            } catch (CircuitBreakingException exception) {
-                searcherToThrowable.put(ClassUtils.getShortName(searcher.getClass()), exception);
-                // ignore only circuit breaking exception
-
-            } catch (Exception exception) {
-                searcherToThrowable.put(ClassUtils.getShortName(searcher.getClass()), exception);
-                break;
-            }
+        try {
+            return placeSearcher.search(searchQuery);
+        } catch (Exception exception) {
+            throw new SearchFailedException(exception);
         }
-
-        throw SearchFailedException.createMultiSearchFailedException(searcherToThrowable);
     }
 
     @Override
