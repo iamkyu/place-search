@@ -16,7 +16,7 @@ public abstract class SearchStrategyTest {
 
     @DisplayName("검색에 성공하면 바로 응답을 반환한다")
     @Test
-    void shouldNotTryNextSearchWhenPrimarySearcherSuccess() {
+    void shouldReturnResultWhenSearchIsSuccess() {
         //given
         AbstractTestSearcher searcher = new AbstractTestSearcher.NormalSearcher();
         sut = createStrategy(searcher);
