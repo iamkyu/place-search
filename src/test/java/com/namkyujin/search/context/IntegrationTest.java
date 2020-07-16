@@ -10,7 +10,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.web.client.RestClientResponseException;
 
 import java.util.Map;
 
@@ -22,23 +21,11 @@ public abstract class IntegrationTest {
     @Autowired
     protected TestRestTemplate localServerRestTemplate;
 
-    protected <T> ResponseEntity get(String url, @Nullable  HttpEntity<?> entity, Class<T> responseType, Map<String, Object> queryParam) {
-        try {
-            return localServerRestTemplate.exchange(url, HttpMethod.GET, entity, responseType, queryParam);
-        } catch (RestClientResponseException e) {
-            return ResponseEntity
-                    .status(e.getRawStatusCode())
-                    .body(e.getResponseBodyAsString());
-        }
+    protected <T> ResponseEntity get(String url, @Nullable HttpEntity<?> entity, Class<T> responseType, Map<String, Object> queryParam) {
+        return localServerRestTemplate.exchange(url, HttpMethod.GET, entity, responseType, queryParam);
     }
 
     protected <T> ResponseEntity post(String url, @Nullable Object request, Class<T> responseType) {
-        try {
-            return localServerRestTemplate.postForEntity(url, request, responseType);
-        } catch (RestClientResponseException e) {
-            return ResponseEntity
-                    .status(e.getRawStatusCode())
-                    .body(e.getResponseBodyAsString());
-        }
+        return localServerRestTemplate.postForEntity(url, request, responseType);
     }
 }
