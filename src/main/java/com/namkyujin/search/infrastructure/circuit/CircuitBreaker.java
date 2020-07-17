@@ -44,7 +44,7 @@ public class CircuitBreaker<T> {
         } catch (Exception exception) {
             lastFailureTimeInUnixTime.compareAndSet(currentLastFailureTimeInUnixTime, System.currentTimeMillis());
             failureCount.compareAndSet(currentFailureCount, currentFailureCount + 1);
-            if (isFailureThreshold(failureCount.get())) {
+            if (isFailureThreshold()) {
                 log.info("CircuitBreaker changed state to OPEN");
             }
 

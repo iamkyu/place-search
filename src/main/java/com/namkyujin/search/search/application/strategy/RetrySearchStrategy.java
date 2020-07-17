@@ -21,7 +21,7 @@ public class RetrySearchStrategy implements SearchStrategy {
 
     @Override
     public SearchResult search(SearchQuery searchQuery) {
-        List<Throwable> searcherToThrowable = new ArrayList<>();
+        List<Throwable> throwables = new ArrayList<>();
         for (int retryCount = 0; retryCount < searchProperties.getMaxRetry(); retryCount++) {
             try {
                 return placeSearcher.search(searchQuery);
@@ -30,12 +30,12 @@ public class RetrySearchStrategy implements SearchStrategy {
                 throw new SearchFailedException(exception);
 
             } catch (Exception exception) {
-                searcherToThrowable.add(exception);
+                throwables.add(exception);
                 // retry except CircuitBreakingException
             }
         }
 
-        throw SearchFailedException.createMultiSearchFailedException(searcherToThrowable);
+        throw SearchFailedException.createMultiSearchFailedException(throwables);
     }
 
     @Override
