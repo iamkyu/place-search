@@ -4,7 +4,6 @@ import com.namkyujin.search.infrastructure.client.ApiClient;
 import com.namkyujin.search.infrastructure.client.ApiClientProperties;
 import com.namkyujin.search.infrastructure.client.IntegrationFailedException;
 import com.namkyujin.search.infrastructure.client.KakaoApiSpec;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.web.client.RestClientResponseException;
 
@@ -12,7 +11,6 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j
 public class KakaoApiClient extends ApiClient implements KakaoApiSpec {
 
     public KakaoApiClient(ApiClientProperties.InstanceProperties properties, RestTemplateBuilder restTemplateBuilder) {
@@ -24,8 +22,8 @@ public class KakaoApiClient extends ApiClient implements KakaoApiSpec {
     @Override
     public KakaoKeywordSearchResponse search(KakaoKeywordSearchRequest request) {
         Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("page", String.valueOf(request.getPage()));
-        queryParams.put("size", String.valueOf(request.getSize()));
+        queryParams.put("page", request.getPage());
+        queryParams.put("size", request.getSize());
         queryParams.put("query", request.getQuery());
 
         URI uri = restTemplate.getUriTemplateHandler().expand(PATH_KEYWORD_SEARCH, queryParams);
