@@ -29,7 +29,14 @@ public class ArgumentValidator {
      * @param argumentName 인자명
      * @throws IllegalArgumentException 유효하지 않음
      */
-    public static void minNumber(long target, int minimum, String argumentName) throws IllegalArgumentException {
+    public static void minNumber(int target, int minimum, String argumentName) throws IllegalArgumentException {
+        if (target < minimum) {
+            throw new IllegalArgumentException(
+                    String.format("%s should be %d or more.", argumentName, minimum));
+        }
+    }
+
+    public static void minNumber(long target, long minimum, String argumentName) throws IllegalArgumentException {
         if (target < minimum) {
             throw new IllegalArgumentException(
                     String.format("%s should be %d or more.", argumentName, minimum));

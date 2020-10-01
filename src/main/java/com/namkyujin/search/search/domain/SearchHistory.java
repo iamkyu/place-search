@@ -31,7 +31,7 @@ public class SearchHistory {
     }
 
     /* self encapsulation */ private void setMemberId(long memberId) {
-        ArgumentValidator.minNumber(1, (int) memberId, "memberId");
+        ArgumentValidator.minNumber(1L, memberId, "memberId");
         this.memberId = memberId;
     }
 
