@@ -8,6 +8,7 @@ import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.awaitility.Awaitility.await;
 
 class CircuitBreakerTest {
     private CircuitBreaker<Boolean> sut;
@@ -30,8 +31,8 @@ class CircuitBreakerTest {
 
         //then
         assertThat(counter.getCallCount()).isEqualTo(1);
-        assertThat(sut.getFailureCount()).isEqualTo(0);
-        assertThat(sut.getLastFailureTimeInUnixTime()).isEqualTo(0);
+        assertThat(sut.getFailureCount()).isZero();
+        assertThat(sut.getLastFailureTimeInUnixTime()).isEqualTo(-1);
     }
 
     @DisplayName("supplier 에서 발생한 예외가 전파된다")
@@ -80,7 +81,7 @@ class CircuitBreakerTest {
 
     @DisplayName("서킷 닫힘 유지 시간이 지나면 서킷 카운트가 초기화 된다")
     @Test
-    void shouldCallPermittedWhenPassTheTimeLimit() throws InterruptedException {
+    void shouldCallPermittedWhenPassTheTimeLimit() {
         //given
         testProperties.setFailureCountThreshold(1);
         testProperties.setWaitDurationInOpenState(Duration.ofMillis(100));
@@ -94,13 +95,14 @@ class CircuitBreakerTest {
         assertThat(sut.getFailureCount()).isEqualTo(1);
 
         // and when
-        Thread.sleep(testProperties.getWaitDurationInOpenState().toMillis() * 2);
-        sut.invoke(counter::run);
+        await()
+                .atMost(Duration.ofMillis(testProperties.getWaitDurationInOpenState().toMillis() * 2))
+                .until(() -> sut.invoke(counter::run));
 
         //then
         assertThat(counter.getCallCount()).isEqualTo(2);
-        assertThat(sut.getFailureCount()).isEqualTo(0);
-        assertThat(sut.getLastFailureTimeInUnixTime()).isEqualTo(0);
+        assertThat(sut.getFailureCount()).isZero();
+        assertThat(sut.getLastFailureTimeInUnixTime()).isEqualTo(-1);
     }
 
 
@@ -116,6 +118,7 @@ class CircuitBreakerTest {
             callCount++;
             throw new RuntimeException();
         }
+
         public boolean occurredException(RuntimeException rethrow) throws RuntimeException {
             callCount++;
             throw rethrow;
